@@ -1,9 +1,15 @@
 /** @jsx h */
-import { h } from "preact";
+import { h, Fragment } from "preact";
 import { tw } from "@twind";
-import LoginForm from "../components/LoginForm.jsx";
+import Counter from "../islands/Counter.tsx";
 
-export default function Home() {
+export const handler = {
+  GET: (req, ctx) => {
+    return ctx.render({ ...ctx.state })
+  },
+};
+
+export default function Home({ data }) {
   return (
     <div class={tw`p-4 mx-auto max-w-screen-md`}>
       <img
@@ -15,7 +21,9 @@ export default function Home() {
         Welcome to `fresh`. Try updating this message in the ./routes/index.tsx
         file, and refresh.
       </p>
-      <LoginForm />
+      <Counter start={3} />
+      {data?.user ? <p><a href="/logout">Logout Here</a></p> : <p><a href="/login">Please Login Here</a></p>}
+      {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>No data right now</p>}
     </div>
   );
 }
